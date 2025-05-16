@@ -24,10 +24,7 @@ public class UserService {
         FileHandler.rewriteUsers(users);
     }
 
-    public boolean isUsernameExists(String username) {
-        List<User> users = getAllUsers();
-        return users.stream().anyMatch(user -> user.getUsername().equals(username));
-    }
+   
 
     public User validateUser(String username, String password) {
         List<User> users = getAllUsers();
