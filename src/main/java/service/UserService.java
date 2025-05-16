@@ -23,4 +23,9 @@ public class UserService {
         users.removeIf(u -> u.getUserId().equals(userId));
         FileHandler.rewriteUsers(users);
     }
+
+    public boolean isUsernameExists(String username) {
+        List<User> users = getAllUsers();
+        return users.stream().anyMatch(user -> user.getUsername().equals(username));
+    }
 }
