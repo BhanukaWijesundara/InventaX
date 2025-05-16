@@ -28,12 +28,5 @@ public class UserService {
         List<User> users = getAllUsers();
         return users.stream().anyMatch(user -> user.getUsername().equals(username));
     }
-
-    public User validateUser(String username, String password) {
-        List<User> users = getAllUsers();
-        return users.stream()
-                .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
-                .findFirst()
-                .orElse(null);
-    }
+    
 }
