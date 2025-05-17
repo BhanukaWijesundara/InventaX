@@ -27,5 +27,36 @@ public class UserServlet extends HttpServlet {
             response.sendRedirect("dashboard.jsp");
             return;
         }
+
+        String action = request.getParameter("action");
+
+        if ("add".equals(action)) {
+            request.getRequestDispatcher("/WEB-INF/views/user/addUser.jsp").forward(request, response);
+        } else if ("edit".equals(action)) {
+            String userId = request.getParameter("id");
+            if (userId != null && !userId.isEmpty()) {
+                List<User> users = service.getAllUsers();
+                User userToEdit = users.stream()
+                        .filter(user -> user.getUserId().equals(userId))
+                        .findFirst()
+                        .orElse(null);
+
+                if (userToEdit != null) {
+                    request.setAttribute("user", userToEdit);
+                    request.getRequestDispatcher("/WEB-INF/views/user/editUser.jsp").forward(request, response);
+                } else {
+                    request.getSession().setAttribute("errorMessage", "User not found!");
+                    response.sendRedirect("user");
+                }
+            } else {
+                response.sendRedirect("user");
+            }
+        } else {
+            List<User> users = service.getAllUsers();
+            request.setAttribute("users", users);
+
+            request.getRequestDispatcher("/WEB-INF/views/user/viewUsers.jsp").forward(request, response);
+        }
     }
-}
+    }
+
