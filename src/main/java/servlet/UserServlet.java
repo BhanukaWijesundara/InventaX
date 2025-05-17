@@ -1,4 +1,6 @@
 package servlet;
 
-public class UserServlet {
-}
+import model.User;
+import service.UserService;
+
+
