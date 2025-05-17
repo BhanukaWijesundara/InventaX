@@ -29,5 +29,15 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("loggedUser") != null) {
+            response.sendRedirect("dashboard");
+        } else {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+    }
 }
 
