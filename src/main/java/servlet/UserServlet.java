@@ -15,10 +15,13 @@ public class UserServlet extends HttpServlet {
     UserService service = new UserService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session != null || session.getAttribute("loggeduser") == null) {
-            
+        if (session == null || session.getAttribute("loggedUser") == null) {
+            response.sendRedirect("login.jsp");
+            return;
         }
+        
     }
 }
