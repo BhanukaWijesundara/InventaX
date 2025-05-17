@@ -10,5 +10,5 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 
-public class LoginServlet {
+public class LoginServlet extends HttpServlet {
 }
