@@ -61,5 +61,17 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
+
+    //Purchase Orders
+    public static void writePurchase(PurchaseOrder order) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\purchases.txt", true))) {
+            writer.write(order.getPurchaseId() + "," + order.getItemId() + "," + order.getQuantity() + "," +
+                    order.getDate() + "," + order.getSupplierId() + "," + order.getStatus());
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("Error writing purchase to file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
 
