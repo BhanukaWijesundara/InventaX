@@ -22,6 +22,10 @@ public class UserServlet extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
-        
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (!"admin".equals(loggedUser.getRole())) {
+            response.sendRedirect("dashboard.jsp");
+            return;
+        }
     }
 }
