@@ -10,3 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+
+public class UserServlet extends HttpServlet {
+
+}
