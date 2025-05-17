@@ -16,12 +16,10 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Optional: Check if user is admin
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("loggedUser");
 
         if (user != null && "admin".equalsIgnoreCase(user.getRole())) {
-            // Admin verified
             request.setAttribute("users", userService.getAllUsers());
             RequestDispatcher dispatcher = request.getRequestDispatcher("dashboard.jsp");
             dispatcher.forward(request, response);
@@ -32,7 +30,6 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Example: delete user from dashboard
         String action = request.getParameter("action");
 
         if ("deleteUser".equals(action)) {

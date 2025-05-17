@@ -11,6 +11,7 @@ import java.io.IOException;
 
 
 public class LoginServlet extends HttpServlet {
+
     private UserService service = new UserService();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
