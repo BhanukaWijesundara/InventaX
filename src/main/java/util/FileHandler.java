@@ -10,13 +10,11 @@ public class FileHandler {
     private static final String ITEMS_FILE = DATA_DIR + "\\items.txt";
 
     static {
-        // Create data directory if it doesn't exist
         File dataDir = new File(DATA_DIR);
         if (!dataDir.exists()) {
             dataDir.mkdirs();
         }
 
-        // Create items file if it doesn't exist
         File itemsFile = new File(ITEMS_FILE);
         if (!itemsFile.exists()) {
             try {
@@ -26,8 +24,7 @@ public class FileHandler {
             }
         }
     }
-
-    //User part file handling(bhanuka)
+    
     public static void writeUser(User user) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_DIR + "\\users.txt", true))) {
             writer.write(user.getUserId() + "," + user.getUsername() + "," + user.getPassword() + "," + user.getRole());
