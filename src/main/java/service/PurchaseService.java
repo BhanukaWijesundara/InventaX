@@ -25,6 +25,23 @@ public class PurchaseService {
         return null;
     }
 
+    public void updatePurchase(PurchaseOrder updatedPurchase) {
+        List<PurchaseOrder> purchases = FileHandler.readPurchases();
+        for (int i = 0; i < purchases.size(); i++) {
+            if (purchases.get(i).getPurchaseId().equals(updatedPurchase.getPurchaseId())) {
+                purchases.set(i, updatedPurchase);
+                break;
+            }
+        }
+        FileHandler.rewritePurchases(purchases);
+    }
+
+    public void deletePurchase(String purchaseId) {
+        List<PurchaseOrder> orders = FileHandler.readPurchases();
+        orders.removeIf(p -> p.getPurchaseId().equals(purchaseId));
+        FileHandler.rewritePurchases(orders);
+    }
+
 
 
 }
