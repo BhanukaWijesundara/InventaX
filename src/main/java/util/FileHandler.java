@@ -111,6 +111,20 @@ public class FileHandler {
         }
         return list;
     }
+    public static void rewritePurchases(List<PurchaseOrder> orders) {
+        File file = new File("C:\\Users\\Hasanthi\\Documents\\GitHub\\InventaX\\data\\purchases.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (PurchaseOrder o : orders) {
+                writer.write(o.getPurchaseId() + "," + o.getItemId() + "," + o.getQuantity() + "," +
+                        o.getDate() + "," + o.getSupplierId() + "," + o.getStatus());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error rewriting purchases file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 
 }
 
