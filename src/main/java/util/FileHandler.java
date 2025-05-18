@@ -125,6 +125,42 @@ public class FileHandler {
         }
     }
 
+    public static void writeSupplier(Supplier s) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\suppliers.txt", true))) {
+            writer.write(s.getSupplierId() + "," + s.getName() + "," + s.getContact() + "," + s.getEmail() + "," + s.getAddress());
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static List<Supplier> readSuppliers() {
+        List<Supplier> list = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\suppliers.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] d = line.split(",");
+                Supplier supplier = new Supplier(d[0], d[1], d[2], d[3]);
+                if (d.length > 4) {
+                    supplier.setAddress(d[4]);
+                }
+                list.add(supplier);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static void rewriteSuppliers(List<Supplier> suppliers) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\suppliers.txt"))) {
+            for (Supplier s : suppliers) {
+                writer.write(s.getSupplierId() + "," + s.getName() + "," + s.getContact() + "," + s.getEmail() + "," + s.getAddress());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
