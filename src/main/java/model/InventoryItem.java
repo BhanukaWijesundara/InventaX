@@ -58,4 +58,3 @@ public class InventoryItem {
             this.category = category;
         }
     }
-}
