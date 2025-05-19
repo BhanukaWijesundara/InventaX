@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class FileHandler {
-    private static final String DATA_DIR = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\InventaX\\data";
+    private static final String DATA_DIR = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\InventaX\\data";
     private static final String ITEMS_FILE = DATA_DIR + "\\items.txt";
 
     static {
