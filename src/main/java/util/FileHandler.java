@@ -24,7 +24,7 @@ public class FileHandler {
             }
         }
     }
-    
+
     public static void writeUser(User user) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_DIR + "\\users.txt", true))) {
             writer.write(user.getUserId() + "," + user.getUsername() + "," + user.getPassword() + "," + user.getRole());
