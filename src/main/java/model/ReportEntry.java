@@ -25,5 +25,44 @@ public class ReportEntry {
         this.generatedDate = generatedDate;
     }
 
+    public String getReportId() {
+        return reportId;
+    }
 
+    public void setReportId(String reportId) {
+        this.reportId = reportId;
+    }
+
+    public String getReportType() {
+        return reportType;
+    }
+
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getGeneratedDate() {
+        return generatedDate;
+    }
+
+    public void setGeneratedDate(Date generatedDate) {
+        this.generatedDate = generatedDate;
+    }
 }
+
