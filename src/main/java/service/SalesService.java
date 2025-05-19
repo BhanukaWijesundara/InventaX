@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SalesService {
 
-    public void addSale(Sales sales) {
+    public void addSale(Sales sale) {
         FileHandler.writeSale(sale);
     }
 
@@ -27,7 +27,7 @@ public class SalesService {
     public void updateSale(Sales updatedSale) {
         List<Sales> sales = FileHandler.readSales();
         for (int i = 0; i < sales.size(); i++) {
-            if (Sales.get(i).getSalesId().equals(updateSale.getSalesId())) {
+            if (sales.get(i).getSalesId().equals(updatedSale.getSalesId())) {
                 sales.set(i, updatedSale);
                 break;
             }
