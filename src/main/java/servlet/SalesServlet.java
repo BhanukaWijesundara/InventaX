@@ -143,7 +143,7 @@ public class SalesServlet extends HttpServlet {
 
             salesService.updateSale(sale);
 
-            
+
             request.getSession().setAttribute("successMessage", "Sale updated successfully!");
             response.sendRedirect("sales?action=list");
         } else {
