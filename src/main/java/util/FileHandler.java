@@ -162,5 +162,72 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
+
+    public static void writeSale(Sales sale) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\sales.txt", true), "UTF-8"))) {
+            writer.write(sale.getSalesId() + "," + sale.getItemId() + "," + sale.getQuantity() + "," +
+                    sale.getDate() + "," + sale.getTotalAmount() + "," + sale.getCustomerName() + "," +
+                    sale.getPaymentStatus());
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("Error writing sale to file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Sales> readSales() {
+        List<Sales> list = new ArrayList<>();
+        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\sales.txt");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.err.println("Error creating sales file: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return list;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(file), "UTF-8"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] d = line.split(",");
+                // Check if we have all required fields
+                if (d.length >= 7) {
+                    try {
+                        list.add(new Sales(d[0], d[1], Integer.parseInt(d[2]), d[3],
+                                Double.parseDouble(d[4]), d[5], d[6]));
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error parsing sales data: " + line);
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.err.println("Invalid sales data format: " + line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading sales file: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static void rewriteSales(List<Sales> sales) {
+        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\sales.txt");
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "UTF-8"))) {
+            for (Sales s : sales) {
+                writer.write(s.getSalesId() + "," + s.getItemId() + "," + s.getQuantity() + "," +
+                        s.getDate() + "," + s.getTotalAmount() + "," + s.getCustomerName() + "," +
+                        s.getPaymentStatus());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error rewriting sales file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
 
