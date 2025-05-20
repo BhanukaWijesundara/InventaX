@@ -26,7 +26,7 @@ public class SalesServlet extends HttpServlet {
             return;
         }
 
-        String action = request.getParameter
+        String action = request.getParameter("action");
 
         if (action == null || action.equals("list")) {
 
