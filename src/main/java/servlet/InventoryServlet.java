@@ -38,7 +38,6 @@ public class InventoryServlet extends HttpServlet {
             // Get the item ID from the request
             String itemId = request.getParameter("id");
             if (itemId != null && !itemId.isEmpty()) {
-                // Get the item by ID
                 InventoryItem item = service.getItemById(itemId);
                 if (item != null) {
                     request.setAttribute("item", item);
@@ -51,7 +50,6 @@ public class InventoryServlet extends HttpServlet {
                 response.sendRedirect("inventory?action=list");
             }
         } else {
-            // Default to list view
             List<InventoryItem> items = service.getSortedInventory();
             request.setAttribute("inventoryItems", items);
             request.getRequestDispatcher("/WEB-INF/views/inventory/viewInventory.jsp").forward(request, response);
@@ -61,7 +59,6 @@ public class InventoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Check if user is logged in
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedUser") == null) {
             response.sendRedirect("login.jsp");
@@ -71,7 +68,6 @@ public class InventoryServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("add".equals(action)) {
-            // Generate a unique item ID
             String itemId = UUID.randomUUID().toString();
             String name = request.getParameter("itemName");
             int qty = Integer.parseInt(request.getParameter("quantity"));
@@ -101,7 +97,7 @@ public class InventoryServlet extends HttpServlet {
 
             request.setAttribute("successMessage", "Item updated successfully!");
             response.sendRedirect("inventory?action=list");
+
         }
     }
 }
-
