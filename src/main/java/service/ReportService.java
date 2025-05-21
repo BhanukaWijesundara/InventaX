@@ -22,3 +22,39 @@ public String generateReport(String reportType, String startDate, String endDate
     reportContent.append("Generated on: ").append(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)).append("\n");
     reportContent.append("Period: ").append(startDate).append(" to ").append(endDate).append("\n\n");
 
+    switch (reportType.toLowerCase()) {
+        case "inventory":
+            generateInventoryReport(reportContent);
+            break;
+        case "sales":
+            generateSalesReport(reportContent, startDate, endDate);
+            break;
+        case "purchases":
+            generatePurchasesReport(reportContent, startDate, endDate);
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid report type: " + reportType);
+    }
+
+    String content = reportContent.toString();
+    
+    try {
+        System.out.println("Saving " + reportType + " report content to: " + reportFilePath);
+        File reportFile = new File(reportFilePath);
+        if (!reportFile.exists()) {
+            reportFile.createNewFile();
+            System.out.println("Created " + reportFileName + " file");
+        }
+        try (FileWriter writer = new FileWriter(reportFile)) {
+            writer.write(content);
+            writer.flush();
+            System.out.println("Successfully wrote " + reportType + " report content");
+        }
+    } catch (IOException e) {
+        System.err.println("Error writing to " + reportType + " report file: " + e.getMessage());
+        e.printStackTrace();
+        throw e;
+    }
+
+
+
