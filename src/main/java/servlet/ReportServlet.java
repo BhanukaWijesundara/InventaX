@@ -98,6 +98,19 @@ public class ReportServlet extends HttpServlet {
                 request.setAttribute("errorMessage", "Invalid report ID.");
                 doGet(request, response);
             }
+        }else {
+            try {
+                List<InventoryItem> inventoryItems = FileHandler.readItems();
+                request.setAttribute("inventoryItems", inventoryItems);
+
+                List<ReportEntry> reports = reportService.getAllReports();
+                request.setAttribute("reports", reports);
+
+                request.getRequestDispatcher("/WEB-INF/views/report/viewReports.jsp").forward(request, response);
+            } catch (IOException e) {
+                request.setAttribute("errorMessage", "Error loading data: " + e.getMessage());
+                request.getRequestDispatcher("/WEB-INF/views/report/viewReports.jsp").forward(request, response);
+            }
         }
     }
 
