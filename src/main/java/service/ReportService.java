@@ -2,12 +2,14 @@ package service;
 
 import model.InventoryItem;
 import model.PurchaseOrder;
+import model.ReportEntry;
 import model.Sales;
 import util.FileHandler;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -276,6 +278,13 @@ private void saveReport(String reportId, String reportType, String startDate, St
     }
 }
 
+public List<ReportEntry> getAllReports() throws IOException {
+    List<ReportEntry> reports = new ArrayList<>();
+    File reportsFile = new File(DATA_DIR, "reports.txt");
+
+    if (!reportsFile.exists()) {
+        return reports;
+    }
 
 
 
