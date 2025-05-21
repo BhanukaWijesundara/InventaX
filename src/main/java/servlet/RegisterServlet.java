@@ -20,12 +20,12 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String userId = request.getParameter("userId");
 
-
         if (userService.isUsernameExists(username)) {
             request.setAttribute("error", "Username already exists!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
+
 
         List<User> users = userService.getAllUsers();
         if (users.stream().anyMatch(user -> user.getUserId().equals(userId))) {
@@ -34,9 +34,9 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
+
         User newUser = new User(userId, username, password, "user");
         userService.addUser(newUser);
-
 
         request.setAttribute("success", "Registration successful! Please login.");
         request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -45,7 +45,6 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         response.sendRedirect("login.jsp");
     }
 }
