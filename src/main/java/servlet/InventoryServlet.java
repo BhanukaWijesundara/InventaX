@@ -38,6 +38,7 @@ public class InventoryServlet extends HttpServlet {
             // Get the item ID from the request
             String itemId = request.getParameter("id");
             if (itemId != null && !itemId.isEmpty()) {
+                // Get the item by ID
                 InventoryItem item = service.getItemById(itemId);
                 if (item != null) {
                     request.setAttribute("item", item);
@@ -50,6 +51,7 @@ public class InventoryServlet extends HttpServlet {
                 response.sendRedirect("inventory?action=list");
             }
         } else {
+            // Default to list view
             List<InventoryItem> items = service.getSortedInventory();
             request.setAttribute("inventoryItems", items);
             request.getRequestDispatcher("/WEB-INF/views/inventory/viewInventory.jsp").forward(request, response);
@@ -59,6 +61,7 @@ public class InventoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Check if user is logged in
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loggedUser") == null) {
             response.sendRedirect("login.jsp");
@@ -68,22 +71,27 @@ public class InventoryServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("add".equals(action)) {
-            String itemId = UUID.randomUUID().toString();
-            String name = request.getParameter("itemName");
-            int qty = Integer.parseInt(request.getParameter("quantity"));
-            String expiry = request.getParameter("expiryDate");
+            String itemId = request.getParameter("itemId");
+            String itemName = request.getParameter("itemName");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String expiryDate = request.getParameter("expiryDate");
             String category = request.getParameter("category");
 
-            InventoryItem item = new InventoryItem(itemId, name, qty, expiry, category);
-            service.addItem(item);
+            // Check if item ID already exists
+            if (service.getItemById(itemId) != null) {
+                request.setAttribute("error", "Item ID already exists. Please use a different ID.");
+                request.getRequestDispatcher("/WEB-INF/views/inventory/addItem.jsp").forward(request, response);
+                return;
+            }
 
-            request.setAttribute("successMessage", "Item added successfully!");
+            InventoryItem item = new InventoryItem(itemId, itemName, quantity, expiryDate, category);
+            service.addItem(item);
             response.sendRedirect("inventory?action=list");
         } else if ("delete".equals(action)) {
             String itemId = request.getParameter("itemId");
             service.deleteItem(itemId);
 
-            request.setAttribute("successMessage", "Item deleted successfully!");
+            request.getSession().setAttribute("successMessage", "Item deleted successfully!");
             response.sendRedirect("inventory?action=list");
         } else if ("update".equals(action)) {
             String itemId = request.getParameter("itemId");
@@ -97,7 +105,6 @@ public class InventoryServlet extends HttpServlet {
 
             request.setAttribute("successMessage", "Item updated successfully!");
             response.sendRedirect("inventory?action=list");
-
         }
     }
 }

@@ -228,53 +228,77 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error rewriting sales file: " + e.getMessage());
             e.printStackTrace();
-        }}
+        }}// ======================= INVENTORY =======================
 
-
-
-        public static void writeItem (InventoryItem item){
-            System.out.println("Writing item to file: " + ITEMS_FILE);
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(ITEMS_FILE, true))) {
-                writer.write(item.getItemId() + "," + item.getItemName() + "," + item.getQuantity() + "," +
-                        item.getExpiryDate() + "," + item.getCategory());
-                writer.newLine();
-                System.out.println("Item written successfully");
-            } catch (IOException e) {
-                System.err.println("Error writing item to file: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-
-        public static List<InventoryItem> readItems () {
-            List<InventoryItem> list = new ArrayList<>();
-            System.out.println("Reading items from file: " + ITEMS_FILE);
-            try (BufferedReader reader = new BufferedReader(new FileReader(ITEMS_FILE))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] d = line.split(",");
-                    list.add(new InventoryItem(d[0], d[1], Integer.parseInt(d[2]), d[3], d[4]));
-                }
-                System.out.println("Read " + list.size() + " items from file");
-            } catch (IOException e) {
-                System.err.println("Error reading items from file: " + e.getMessage());
-                e.printStackTrace();
-            }
-            return list;
-        }
-
-        public static void rewriteItems (Stack < InventoryItem > items) {
-            System.out.println("Rewriting items to file: " + ITEMS_FILE);
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(ITEMS_FILE))) {
-                for (InventoryItem i : items) {
-                    writer.write(i.getItemId() + "," + i.getItemName() + "," + i.getQuantity() + "," +
-                            i.getExpiryDate() + "," + i.getCategory());
-                    writer.newLine();
-                }
-                System.out.println("Items rewritten successfully");
-            } catch (IOException e) {
-                System.err.println("Error rewriting items to file: " + e.getMessage());
-                e.printStackTrace();
-            }
+    public static void writeItem(InventoryItem item) {
+        System.out.println("Writing item to file: " + ITEMS_FILE);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ITEMS_FILE, true))) {
+            writer.write(item.getItemId() + "," + item.getItemName() + "," + item.getQuantity() + "," +
+                    item.getExpiryDate() + "," + item.getCategory());
+            writer.newLine();
+            System.out.println("Item written successfully");
+        } catch (IOException e) {
+            System.err.println("Error writing item to file: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
+    public static List<InventoryItem> readItems() {
+        List<InventoryItem> list = new ArrayList<>();
+        System.out.println("Reading items from file: " + ITEMS_FILE);
+        try (BufferedReader reader = new BufferedReader(new FileReader(ITEMS_FILE))) {
+            String line;
+            int lineNum = 0;
+            while ((line = reader.readLine()) != null) {
+                lineNum++;
+                if (line.trim().isEmpty()) {
+                    continue; // Skip empty lines
+                }
+
+                try {
+                    String[] d = line.split(",");
+                    if (d.length < 5) {
+                        System.err.println("Warning: Line " + lineNum + " has insufficient data: " + line);
+                        continue;
+                    }
+
+                    // Parse quantity with error handling and better whitespace handling
+                    int quantity;
+                    try {
+                        // Clean up quantity by removing all whitespace
+                        String cleanQuantity = d[2].replaceAll("\\s+", "").trim();
+                        quantity = Integer.parseInt(cleanQuantity);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error parsing quantity at line " + lineNum + ": '" + d[2] + "'. Using default value 0.");
+                        quantity = 0; // Use a default value
+                    }
+
+                    list.add(new InventoryItem(d[0], d[1], quantity, d[3], d[4]));
+                } catch (Exception e) {
+                    System.err.println("Error processing line " + lineNum + ": " + line);
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("Read " + list.size() + " items from file");
+        } catch (IOException e) {
+            System.err.println("Error reading items from file: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static void rewriteItems(Stack<InventoryItem> items) {
+        System.out.println("Rewriting items to file: " + ITEMS_FILE);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ITEMS_FILE))) {
+            for (InventoryItem i : items) {
+                writer.write(i.getItemId() + "," + i.getItemName() + "," + i.getQuantity() + "," +
+                        i.getExpiryDate() + "," + i.getCategory());
+                writer.newLine();
+            }
+            System.out.println("Items rewritten successfully");
+        } catch (IOException e) {
+            System.err.println("Error rewriting items to file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }}
 
