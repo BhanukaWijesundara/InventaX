@@ -82,5 +82,17 @@ private void generateInventoryReport(StringBuilder reportContent) throws IOExcep
     int totalProducts = items.size();
     int itemNumber = 1;
 
+    for (InventoryItem item : items) {
+        reportContent.append(String.format("%-8d %-35s %12d %20s %15s\n",
+                itemNumber++,
+                truncateOrPad(item.getItemName(), 35),
+                item.getQuantity(),
+                String.format("%20s", truncateOrPad(item.getExpiryDate(), 20)),
+                String.format("%15s", truncateOrPad(item.getCategory(), 15))
+        ));
+
+        totalItems += item.getQuantity();
+    }
+
 
 
