@@ -8,6 +8,7 @@ public class ReportEntry {
     private Date startDate;
     private Date endDate;
     private Date generatedDate;
+    private String filePath;
 
     public ReportEntry() {
         this.reportId = "N/A";
@@ -15,14 +16,16 @@ public class ReportEntry {
         this.startDate = null;
         this.endDate = null;
         this.generatedDate = null;
+        this.filePath = null;
     }
 
-    public ReportEntry(String reportId, String reportType, Date startDate, Date endDate, Date generatedDate) {
+    public ReportEntry(String reportId, String reportType, Date startDate, Date endDate, Date generatedDate, String filePath) {
         this.reportId = reportId;
         this.reportType = reportType;
         this.startDate = startDate;
         this.endDate = endDate;
         this.generatedDate = generatedDate;
+        this.filePath = filePath;
     }
 
     public String getReportId() {
@@ -63,6 +66,14 @@ public class ReportEntry {
 
     public void setGeneratedDate(Date generatedDate) {
         this.generatedDate = generatedDate;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
 

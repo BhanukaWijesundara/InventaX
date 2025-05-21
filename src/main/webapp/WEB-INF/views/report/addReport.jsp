@@ -5,6 +5,7 @@
   Time: 9:49 PM
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
@@ -103,4 +104,115 @@
             color: #f8f9fa;
         }
     </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+            <div class="position-sticky pt-3">
+                <h4 class="text-center mb-3">InventaX</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/dashboard">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/inventory?action=list">
+                            <i class="fas fa-boxes me-2"></i>Inventory
+                        </a>
+                    </li>
+                    <c:if test="${sessionScope.loggedUser.role == 'admin'}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/user">
+                                <i class="fas fa-user me-2"></i>Users
+                            </a>
+                        </li>
+                    </c:if>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/suppliers?action=list">
+                            <i class="fas fa-truck me-2"></i>Suppliers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/purchases?action=list">
+                            <i class="fas fa-shopping-cart me-2"></i>Purchases
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/sales">
+                            <i class="fas fa-chart-line me-2"></i>Sales
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="${pageContext.request.contextPath}/reports">
+                            <i class="fas fa-file-alt me-2"></i>Reports
+                        </a>
+                    </li>
+                    <li class="nav-item mt-auto">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/logout">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Generate Report</h1>
+                <a href="reports" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Reports
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <c:if test="${not empty errorMessage}">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                ${errorMessage}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </c:if>
+
+                    <form action="reports" method="post">
+                        <input type="hidden" name="action" value="generate">
+
+                        <div class="mb-3">
+                            <label for="reportType" class="form-label">Report Type</label>
+                            <select class="form-select" id="reportType" name="reportType" required>
+                                <option value="">Select Report Type</option>
+                                <option value="inventory">Inventory Status</option>
+                                <option value="sales">Sales Report</option>
+                                <option value="purchases">Purchases Report</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate" required>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-file-download me-2"></i> Generate Report
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 </head>
