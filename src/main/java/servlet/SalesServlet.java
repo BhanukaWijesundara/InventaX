@@ -26,7 +26,7 @@ public class SalesServlet extends HttpServlet {
             return;
         }
 
-        String action = request.getParameter
+        String action = request.getParameter("action");
 
         if (action == null || action.equals("list")) {
 
@@ -109,10 +109,27 @@ public class SalesServlet extends HttpServlet {
                 System.err.println("Error parsing numeric values: " + e.getMessage());
             }
 
+
+            InventoryItem item = inventoryService.getItemById(itemId);
+            if (item == null) {
+                request.getSession().setAttribute("errorMessage", "Selected item not found!");
+                response.sendRedirect("sales?action=add");
+                return;
+            }
+
+            if (item.getQuantity() < quantity) {
+                request.getSession().setAttribute("errorMessage", "Insufficient stock! Only " + item.getQuantity() + " items available.");
+                response.sendRedirect("sales?action=add");
+                return;
+            }
+
             Sales sale = new Sales(salesId, itemId, quantity, date, totalAmount, customerName, paymentStatus);
 
 
             salesService.addSale(sale);
+
+            item.setQuantity(item.getQuantity() - quantity);
+            inventoryService.updateItem(item);
 
 
             request.getSession().setAttribute("successMessage", "Sale added successfully!");
@@ -138,10 +155,36 @@ public class SalesServlet extends HttpServlet {
                 System.err.println("Error parsing numeric values: " + e.getMessage());
             }
 
+            Sales originalSale = salesService.getSaleById(salesId);
+            if (originalSale == null) {
+                request.getSession().setAttribute("errorMessage", "Sale not found!");
+                response.sendRedirect("sales?action=list");
+                return;
+            }
+
+            // Check if requested quantity is available in inventory
+            InventoryItem item = inventoryService.getItemById(itemId);
+            if (item == null) {
+                request.getSession().setAttribute("errorMessage", "Selected item not found!");
+                response.sendRedirect("sales?action=edit&id=" + salesId);
+                return;
+            }
+
+            // Calculate the quantity difference
+            int quantityDifference = quantity - originalSale.getQuantity();
+            if (item.getQuantity() < quantityDifference) {
+                request.getSession().setAttribute("errorMessage", "Insufficient stock! Only " + item.getQuantity() + " items available.");
+                response.sendRedirect("sales?action=edit&id=" + salesId);
+                return;
+            }
+
             Sales sale = new Sales(salesId, itemId, quantity, date, totalAmount, customerName, paymentStatus);
 
 
             salesService.updateSale(sale);
+
+            item.setQuantity(item.getQuantity() - quantityDifference);
+            inventoryService.updateItem(item);
 
 
             request.getSession().setAttribute("successMessage", "Sale updated successfully!");
