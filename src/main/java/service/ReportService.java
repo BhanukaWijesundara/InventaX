@@ -37,7 +37,7 @@ public String generateReport(String reportType, String startDate, String endDate
     }
 
     String content = reportContent.toString();
-    
+
     try {
         System.out.println("Saving " + reportType + " report content to: " + reportFilePath);
         File reportFile = new File(reportFilePath);
@@ -55,6 +55,10 @@ public String generateReport(String reportType, String startDate, String endDate
         e.printStackTrace();
         throw e;
     }
+    saveReport(reportId, reportType, startDate, endDate, reportFilePath);
+
+    return content;
+}
 
 
 
