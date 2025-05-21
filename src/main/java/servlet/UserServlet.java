@@ -22,6 +22,7 @@ public class UserServlet extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
+
         User loggedUser = (User) session.getAttribute("loggedUser");
         if (!"admin".equals(loggedUser.getRole())) {
             response.sendRedirect("dashboard.jsp");
@@ -58,5 +59,66 @@ public class UserServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/user/viewUsers.jsp").forward(request, response);
         }
     }
-    }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedUser") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if (!"admin".equals(loggedUser.getRole())) {
+            response.sendRedirect("dashboard.jsp");
+            return;
+        }
+
+        String action = request.getParameter("action");
+
+        if ("add".equals(action)) {
+            String id = request.getParameter("userId");
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String role = request.getParameter("role");
+
+            User user = new User(id, username, password, role);
+            service.addUser(user);
+            request.setAttribute("successMessage", "User added successfully!");
+            response.sendRedirect("user");
+        } else if ("update".equals(action)) {
+            String userId = request.getParameter("userId");
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String role = request.getParameter("role");
+
+            List<User> users = service.getAllUsers();
+            User existingUser = users.stream()
+                    .filter(user -> user.getUserId().equals(userId))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existingUser != null) {
+                existingUser.setUsername(username);
+                if (password != null && !password.trim().isEmpty()) {
+                    existingUser.setPassword(password);
+                }
+                existingUser.setRole(role);
+
+                users.removeIf(user -> user.getUserId().equals(userId));
+                users.add(existingUser);
+                service.updateUser(users);
+
+                request.setAttribute("successMessage", "User updated successfully!");
+            } else {
+                request.setAttribute("errorMessage", "User not found!");
+            }
+            response.sendRedirect("user");
+        } else if ("delete".equals(action)) {
+            String userId = request.getParameter("userId");
+            service.deleteUser(userId);
+            request.setAttribute("successMessage", "User deleted successfully!");
+            response.sendRedirect("user");
+        }
+    }
+}
