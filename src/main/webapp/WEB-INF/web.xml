@@ -40,6 +40,15 @@
     <url-pattern>/admin</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>PurchaseServlet</servlet-name>
+    <servlet-class>servlet.PurchaseServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PurchaseServlet</servlet-name>
+    <url-pattern>/purchases</url-pattern>
+  </servlet-mapping>
+
 
   <welcome-file-list>
     <welcome-file>login.jsp</welcome-file>
