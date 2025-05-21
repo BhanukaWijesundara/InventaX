@@ -94,5 +94,10 @@ private void generateInventoryReport(StringBuilder reportContent) throws IOExcep
         totalItems += item.getQuantity();
     }
 
+    reportContent.append("\nSUMMARY\n");
+    reportContent.append("=======\n");
+    reportContent.append(String.format("Total Items in Stock: %d\n", totalItems));
+    reportContent.append(String.format("Number of Products: %d\n", totalProducts));
+
 
 
