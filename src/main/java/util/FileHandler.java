@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class FileHandler {
-    private static final String DATA_DIR = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\InventaX\\data";
+    private static final String DATA_DIR = "C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data";
     private static final String ITEMS_FILE = DATA_DIR + "\\items.txt";
 
     static {
@@ -61,7 +61,7 @@ public class FileHandler {
 
     //Purchase Orders
     public static void writePurchase(PurchaseOrder order) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Hasanthi\\Documents\\GitHub\\InventaX\\data\\purchases.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\purchases.txt", true))) {
             writer.write(order.getPurchaseId() + "," + order.getItemId() + "," + order.getQuantity() + "," +
                     order.getDate() + "," + order.getSupplierId() + "," + order.getStatus());
             writer.newLine();
@@ -73,7 +73,7 @@ public class FileHandler {
 
     public static List<PurchaseOrder> readPurchases() {
         List<PurchaseOrder> list = new ArrayList<>();
-        File file = new File("C:\\Users\\Hasanthi\\Documents\\GitHub\\InventaX\\data\\purchases.txt");
+        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\purchases.txt");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -111,8 +111,9 @@ public class FileHandler {
         }
         return list;
     }
+
     public static void rewritePurchases(List<PurchaseOrder> orders) {
-        File file = new File("C:\\Users\\Hasanthi\\Documents\\GitHub\\InventaX\\data\\purchases.txt");
+        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\purchases.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (PurchaseOrder o : orders) {
                 writer.write(o.getPurchaseId() + "," + o.getItemId() + "," + o.getQuantity() + "," +
@@ -126,7 +127,7 @@ public class FileHandler {
     }
 
     public static void writeSupplier(Supplier s) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\suppliers.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\suppliers.txt", true))) {
             writer.write(s.getSupplierId() + "," + s.getName() + "," + s.getContact() + "," + s.getEmail() + "," + s.getAddress());
             writer.newLine();
         } catch (IOException e) {
@@ -136,7 +137,7 @@ public class FileHandler {
 
     public static List<Supplier> readSuppliers() {
         List<Supplier> list = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\suppliers.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\suppliers.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] d = line.split(",");
@@ -153,7 +154,7 @@ public class FileHandler {
     }
 
     public static void rewriteSuppliers(List<Supplier> suppliers) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ADMIN\\OneDrive\\Desktop\\projectXX\\data\\suppliers.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\suppliers.txt"))) {
             for (Supplier s : suppliers) {
                 writer.write(s.getSupplierId() + "," + s.getName() + "," + s.getContact() + "," + s.getEmail() + "," + s.getAddress());
                 writer.newLine();
@@ -162,5 +163,118 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
-}
+
+    public static void writeSale(Sales sale) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\sales.txt", true), "UTF-8"))) {
+            writer.write(sale.getSalesId() + "," + sale.getItemId() + "," + sale.getQuantity() + "," +
+                    sale.getDate() + "," + sale.getTotalAmount() + "," + sale.getCustomerName() + "," +
+                    sale.getPaymentStatus());
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("Error writing sale to file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Sales> readSales() {
+        List<Sales> list = new ArrayList<>();
+        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\sales.txt");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.err.println("Error creating sales file: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return list;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(file), "UTF-8"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] d = line.split(",");
+                // Check if we have all required fields
+                if (d.length >= 7) {
+                    try {
+                        list.add(new Sales(d[0], d[1], Integer.parseInt(d[2]), d[3],
+                                Double.parseDouble(d[4]), d[5], d[6]));
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error parsing sales data: " + line);
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.err.println("Invalid sales data format: " + line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading sales file: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static void rewriteSales(List<Sales> sales) {
+        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\sales.txt");
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "UTF-8"))) {
+            for (Sales s : sales) {
+                writer.write(s.getSalesId() + "," + s.getItemId() + "," + s.getQuantity() + "," +
+                        s.getDate() + "," + s.getTotalAmount() + "," + s.getCustomerName() + "," +
+                        s.getPaymentStatus());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error rewriting sales file: " + e.getMessage());
+            e.printStackTrace();
+        }}
+
+
+
+        public static void writeItem (InventoryItem item){
+            System.out.println("Writing item to file: " + ITEMS_FILE);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(ITEMS_FILE, true))) {
+                writer.write(item.getItemId() + "," + item.getItemName() + "," + item.getQuantity() + "," +
+                        item.getExpiryDate() + "," + item.getCategory());
+                writer.newLine();
+                System.out.println("Item written successfully");
+            } catch (IOException e) {
+                System.err.println("Error writing item to file: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        public static List<InventoryItem> readItems () {
+            List<InventoryItem> list = new ArrayList<>();
+            System.out.println("Reading items from file: " + ITEMS_FILE);
+            try (BufferedReader reader = new BufferedReader(new FileReader(ITEMS_FILE))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] d = line.split(",");
+                    list.add(new InventoryItem(d[0], d[1], Integer.parseInt(d[2]), d[3], d[4]));
+                }
+                System.out.println("Read " + list.size() + " items from file");
+            } catch (IOException e) {
+                System.err.println("Error reading items from file: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return list;
+        }
+
+        public static void rewriteItems (Stack < InventoryItem > items) {
+            System.out.println("Rewriting items to file: " + ITEMS_FILE);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(ITEMS_FILE))) {
+                for (InventoryItem i : items) {
+                    writer.write(i.getItemId() + "," + i.getItemName() + "," + i.getQuantity() + "," +
+                            i.getExpiryDate() + "," + i.getCategory());
+                    writer.newLine();
+                }
+                System.out.println("Items rewritten successfully");
+            } catch (IOException e) {
+                System.err.println("Error rewriting items to file: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
 
