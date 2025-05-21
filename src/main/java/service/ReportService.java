@@ -145,11 +145,47 @@ private void generateSalesReport(StringBuilder reportContent, String startDate, 
     reportContent.append("============\n\n");
     reportContent.append("Period: ").append(startDate).append(" to ").append(endDate).append("\n\n");
 
-    
+
     reportContent.append(String.format("%-10s %-8s %-12s %-12s %-20s %-15s\n",
             "Sale ID", "Quantity", "Date", "Amount", "Customer", "Status"));
     reportContent.append(String.format("%-10s %-8s %-12s %-12s %-20s %-15s\n",
             "--------", "--------", "------------", "------------", "--------------------", "---------------"));
+
+    double totalSales = 0;
+    int totalItems = 0;
+    int salesCount = 0;
+
+    for (Sales sale : sales) {
+        String saleDate = sale.getDate();
+
+        if (isDateInRange(saleDate, startDate, endDate)) {
+            reportContent.append(String.format("%-10s %-8d %-12s $%-11.2f %-20s %-15s\n",
+                    sale.getSalesId(),
+                    sale.getQuantity(),
+                    saleDate,
+                    sale.getTotalAmount(),
+                    sale.getCustomerName(),
+                    sale.getPaymentStatus()
+            ));
+
+            totalSales += sale.getTotalAmount();
+            totalItems += sale.getQuantity();
+            salesCount++;
+        }
+    }
+
+    if (salesCount == 0) {
+        reportContent.append("No sales recorded for the selected period.\n");
+        return;
+    }
+
+    reportContent.append("\nSUMMARY\n");
+    reportContent.append("=======\n");
+    reportContent.append(String.format("Total Sales: $%.2f\n", totalSales));
+    reportContent.append(String.format("Total Items Sold: %d\n", totalItems));
+    reportContent.append(String.format("Number of Sales: %d\n", salesCount));
+    reportContent.append(String.format("Average Sale Value: $%.2f\n", salesCount > 0 ? totalSales / salesCount : 0));
+}
 
 
 
