@@ -58,7 +58,31 @@ public class ReportServlet extends HttpServlet {
                             break;
                         }
                     }
+                    if (reportEntry != null) {
+                        String reportFilePath = reportEntry.getFilePath();
 
+                        if (reportFilePath == null || reportFilePath.isEmpty()) {
+                            reportFilePath = DATA_DIR + File.separator +
+                                    reportEntry.getReportType().toLowerCase() + "_report.txt";
+                        }
+                    }
+
+                    File reportFile = new File(reportFilePath);
+
+                    if (reportFile.exists()) {
+                        StringBuilder content = new StringBuilder();
+                        try (BufferedReader reader = new BufferedReader(new FileReader(reportFile))) {
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                content.append(line).append("\n");
+                            }
+                        }
+
+                        request.setAttribute("reportType", reportEntry.getReportType());
+                        request.setAttribute("generatedDate", reportEntry.getGeneratedDate().toString());
+                        request.setAttribute("reportContent", content.toString());
+                        request.getRequestDispatcher("/WEB-INF/views/report/previewReport.jsp").forward(request, response);
+                    }
                 }
             }
         }
