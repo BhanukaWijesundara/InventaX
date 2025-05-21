@@ -2,6 +2,7 @@ package service;
 
 import model.InventoryItem;
 import model.PurchaseOrder;
+import model.Sales;
 import util.FileHandler;
 
 import java.io.*;
@@ -131,7 +132,24 @@ private String truncateOrPad(String text, int maxLength) {
 
     return String.format("%-" + maxLength + "s", text);
 }
+
+private void generateSalesReport(StringBuilder reportContent, String startDate, String endDate) throws IOException {
+    List<Sales> sales = FileHandler.readSales();
+
+    if (sales.isEmpty()) {
+        reportContent.append("No sales data available.\n");
+        return;
+    }
+
+    reportContent.append("SALES REPORT\n");
+    reportContent.append("============\n\n");
+    reportContent.append("Period: ").append(startDate).append(" to ").append(endDate).append("\n\n");
+
     
+    reportContent.append(String.format("%-10s %-8s %-12s %-12s %-20s %-15s\n",
+            "Sale ID", "Quantity", "Date", "Amount", "Customer", "Status"));
+    reportContent.append(String.format("%-10s %-8s %-12s %-12s %-20s %-15s\n",
+            "--------", "--------", "------------", "------------", "--------------------", "---------------"));
 
 
 
