@@ -199,4 +199,4 @@ public class SalesServlet extends HttpServlet {
             response.sendRedirect("sales?action=list");
         }
     }
-} 
+}
