@@ -27,4 +27,17 @@ public class ReportServlet extends HttpServlet {
     private ReportService reportService;
     private static final String BASE_DIR = System.getProperty("user.dir");
     private static final String DATA_DIR = BASE_DIR + File.separator + "data";
+
+    @Override
+    public void init() throws ServletException {
+        reportService = new ReportService();
+
+        File dataDir = new File(DATA_DIR);
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
+        }
+    }
+
+    
+
 }
