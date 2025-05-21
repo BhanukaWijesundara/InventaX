@@ -150,11 +150,32 @@ public class ReportServlet extends HttpServlet {
                         content.append(line).append("\n");
                     }
                 }
+
+                request.setAttribute("reportContent", content.toString());
+                request.setAttribute("reportType", reportType);
+                request.setAttribute("generatedDate", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                request.getRequestDispatcher("/WEB-INF/views/report/previewReport.jsp").forward(request, response);
+
+            }catch (Exception e) {
+                System.err.println("Error generating report: " + e.getMessage());
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Error generating report: " + e.getMessage());
+                request.getRequestDispatcher("/WEB-INF/views/report/addReport.jsp").forward(request, response);
             }
-
-
+        }else if ("delete".equals(action)) {
+            String reportId = request.getParameter("id");
+            if (reportId != null && !reportId.isEmpty()) {
+                try {
+                    reportService.deleteReport(reportId);
+                    request.setAttribute("successMessage", "Report deleted successfully.");
+                } catch (IOException e) {
+                    request.setAttribute("errorMessage", "Error deleting report: " + e.getMessage());
+                }
+            }
+            doGet(request, response);
+        }else {
+            doGet(request, response);
         }
-
 
     }
 
