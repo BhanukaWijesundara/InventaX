@@ -343,6 +343,23 @@ public void deleteReport(String reportId) throws IOException {
             }
         }
 
+        try (FileWriter writer = new FileWriter(reportsFile)) {
+            for (String line : lines) {
+                writer.write(line + "\n");
+            }
+        }
+
+        if (reportFilePath != null) {
+            File reportFile = new File(reportFilePath);
+            if (reportFile.exists()) {
+                if (reportFile.delete()) {
+                    System.out.println("Deleted report file: " + reportFilePath);
+                } else {
+                    System.err.println("Failed to delete report file: " + reportFilePath);
+                }
+            }
+        }
+
 
     }
 }
