@@ -120,5 +120,18 @@ private void generateInventoryReport(StringBuilder reportContent) throws IOExcep
     reportContent.append(String.format("Products Out of Stock: %d\n", outOfStock));
 }
 
+private String truncateOrPad(String text, int maxLength) {
+    if (text == null) {
+        return String.format("%-" + maxLength + "s", "");
+    }
+
+    if (text.length() > maxLength) {
+        return text.substring(0, maxLength - 3) + "...";
+    }
+
+    return String.format("%-" + maxLength + "s", text);
+}
+    
+
 
 
