@@ -285,6 +285,29 @@ public List<ReportEntry> getAllReports() throws IOException {
     if (!reportsFile.exists()) {
         return reports;
     }
+    try (BufferedReader reader = new BufferedReader(new FileReader(reportsFile))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",");
+            if (parts.length >= 5) {
+                ReportEntry report = new ReportEntry();
+                report.setReportId(parts[0]);
+                report.setReportType(parts[1]);
+                try {
+                    report.setStartDate(java.sql.Date.valueOf(parts[2]));
+                    report.setEndDate(java.sql.Date.valueOf(parts[3]));
+                    report.setGeneratedDate(java.sql.Date.valueOf(parts[4].split("T")[0]));
+
+                    if (parts.length >= 6) {
+                        report.setFilePath(parts[5]);
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Error parsing date in report entry: " + line);
+                    continue;
+                }
+                reports.add(report);
+            }
+        }
 
 
 
