@@ -187,5 +187,54 @@ private void generateSalesReport(StringBuilder reportContent, String startDate, 
     reportContent.append(String.format("Average Sale Value: $%.2f\n", salesCount > 0 ? totalSales / salesCount : 0));
 }
 
+private void generatePurchasesReport(StringBuilder reportContent, String startDate, String endDate) throws IOException {
+    List<PurchaseOrder> purchases = FileHandler.readPurchases();
+
+    if (purchases.isEmpty()) {
+        reportContent.append("No purchases data available.\n");
+        return;
+    }
+
+    reportContent.append("PURCHASES REPORT\n");
+    reportContent.append("================\n\n");
+    reportContent.append("Period: ").append(startDate).append(" to ").append(endDate).append("\n\n");
+    
+    reportContent.append(String.format("%-15s %-10s %-12s %-15s %-15s\n",
+            "Purchase ID", "Quantity", "Date", "Supplier ID", "Status"));
+    reportContent.append(String.format("%-15s %-10s %-12s %-15s %-15s\n",
+            "---------------", "----------", "------------", "---------------", "---------------"));
+
+    int totalQuantity = 0;
+    int purchaseCount = 0;
+
+    for (PurchaseOrder purchase : purchases) {
+        String purchaseDate = purchase.getDate();
+
+        if (isDateInRange(purchaseDate, startDate, endDate)) {
+
+            reportContent.append(String.format("%-15s %-10d %-12s %-15s %-15s\n",
+                    purchase.getPurchaseId(),
+                    purchase.getQuantity(),
+                    purchaseDate,
+                    purchase.getSupplierId(),
+                    purchase.getStatus()
+            ));
+
+            totalQuantity += purchase.getQuantity();
+            purchaseCount++;
+        }
+    }
+
+    if (purchaseCount == 0) {
+        reportContent.append("No purchases recorded for the selected period.\n");
+        return;
+    }
+
+    reportContent.append("\nSUMMARY\n");
+    reportContent.append("=======\n");
+    reportContent.append(String.format("Total Items Purchased: %d\n", totalQuantity));
+    reportContent.append(String.format("Number of Purchases: %d\n", purchaseCount));
+}
+
 
 
