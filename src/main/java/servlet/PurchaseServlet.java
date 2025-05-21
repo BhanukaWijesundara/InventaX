@@ -98,14 +98,6 @@ public class PurchaseServlet extends HttpServlet {
             } else {
                 response.sendRedirect(request.getContextPath() + "/purchases?action=list");
             }
-        } else if (action.equals("delete")) {
-            // Delete the purchase
-            String purchaseId = request.getParameter("id");
-            if (purchaseId != null && !purchaseId.isEmpty()) {
-                purchaseService.deletePurchase(purchaseId);
-                request.getSession().setAttribute("successMessage", "Purchase deleted successfully!");
-            }
-            response.sendRedirect(request.getContextPath() + "/purchases?action=list");
         }
     }
 
@@ -121,60 +113,70 @@ public class PurchaseServlet extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        if (action != null && action.equals("add")) {
-            // Get purchase details from the form
-            String purchaseId = request.getParameter("purchaseId");
-            String itemId = request.getParameter("itemId");
-            String quantityStr = request.getParameter("quantity");
-            String supplierId = request.getParameter("supplierId");
-            String purchaseDate = request.getParameter("purchaseDate");
-            String status = request.getParameter("status");
+        if (action != null) {
+            if (action.equals("add")) {
+                // Get purchase details from the form
+                String purchaseId = request.getParameter("purchaseId");
+                String itemId = request.getParameter("itemId");
+                String quantityStr = request.getParameter("quantity");
+                String supplierId = request.getParameter("supplierId");
+                String purchaseDate = request.getParameter("purchaseDate");
+                String status = request.getParameter("status");
 
-            // Create a new purchase order object
-            int quantity = 1; // Default value
-            try {
-                quantity = Integer.parseInt(quantityStr);
-            } catch (NumberFormatException e) {
-                // If parsing fails, use default value
-                System.err.println("Error parsing quantity: " + quantityStr);
+                // Create a new purchase order object
+                int quantity = 1; // Default value
+                try {
+                    quantity = Integer.parseInt(quantityStr);
+                } catch (NumberFormatException e) {
+                    // If parsing fails, use default value
+                    System.err.println("Error parsing quantity: " + quantityStr);
+                }
+
+                PurchaseOrder purchase = new PurchaseOrder(purchaseId, itemId, quantity, purchaseDate, supplierId);
+                purchase.setStatus(status); // Set the status from the form
+
+                // Add the purchase using the service
+                purchaseService.addPurchase(purchase);
+
+                // Set success message and redirect
+                request.getSession().setAttribute("successMessage", "Purchase added successfully!");
+                response.sendRedirect(request.getContextPath() + "/purchases?action=list");
+            } else if (action.equals("update")) {
+                // Get purchase details from the form
+                String purchaseId = request.getParameter("purchaseId");
+                String itemId = request.getParameter("itemId");
+                String quantityStr = request.getParameter("quantity");
+                String supplierId = request.getParameter("supplierId");
+                String purchaseDate = request.getParameter("purchaseDate");
+                String status = request.getParameter("status");
+
+                // Create an updated purchase order object
+                int quantity = 1; // Default value
+                try {
+                    quantity = Integer.parseInt(quantityStr);
+                } catch (NumberFormatException e) {
+                    // If parsing fails, use default value
+                    System.err.println("Error parsing quantity: " + quantityStr);
+                }
+
+                PurchaseOrder purchase = new PurchaseOrder(purchaseId, itemId, quantity, purchaseDate, supplierId);
+                purchase.setStatus(status); // Set the status from the form
+
+                // Update the purchase using the service
+                purchaseService.updatePurchase(purchase);
+
+                // Set success message and redirect
+                request.getSession().setAttribute("successMessage", "Purchase updated successfully!");
+                response.sendRedirect(request.getContextPath() + "/purchases?action=list");
+            } else if (action.equals("delete")) {
+                // Delete the purchase
+                String purchaseId = request.getParameter("purchaseId");
+                if (purchaseId != null && !purchaseId.isEmpty()) {
+                    purchaseService.deletePurchase(purchaseId);
+                    request.getSession().setAttribute("successMessage", "Purchase deleted successfully!");
+                }
+                response.sendRedirect(request.getContextPath() + "/purchases?action=list");
             }
-
-            PurchaseOrder purchase = new PurchaseOrder(purchaseId, itemId, quantity, purchaseDate, supplierId);
-            purchase.setStatus(status); // Set the status from the form
-
-            // Add the purchase using the service
-            purchaseService.addPurchase(purchase);
-
-            // Set success message and redirect
-            request.getSession().setAttribute("successMessage", "Purchase added successfully!");
-            response.sendRedirect(request.getContextPath() + "/purchases?action=list");
-        } else if (action != null && action.equals("update")) {
-            // Get purchase details from the form
-            String purchaseId = request.getParameter("purchaseId");
-            String itemId = request.getParameter("itemId");
-            String quantityStr = request.getParameter("quantity");
-            String supplierId = request.getParameter("supplierId");
-            String purchaseDate = request.getParameter("purchaseDate");
-            String status = request.getParameter("status");
-
-            // Create an updated purchase order object
-            int quantity = 1; // Default value
-            try {
-                quantity = Integer.parseInt(quantityStr);
-            } catch (NumberFormatException e) {
-                // If parsing fails, use default value
-                System.err.println("Error parsing quantity: " + quantityStr);
-            }
-
-            PurchaseOrder purchase = new PurchaseOrder(purchaseId, itemId, quantity, purchaseDate, supplierId);
-            purchase.setStatus(status); // Set the status from the form
-
-            // Update the purchase using the service
-            purchaseService.updatePurchase(purchase);
-
-            // Set success message and redirect
-            request.getSession().setAttribute("successMessage", "Purchase updated successfully!");
-            response.sendRedirect(request.getContextPath() + "/purchases?action=list");
         } else {
             response.sendRedirect(request.getContextPath() + "/purchases?action=list");
         }
