@@ -193,7 +193,7 @@ public class FileHandler {
 
     public static List<Sales> readSales() {
         List<Sales> list = new ArrayList<>();
-        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\InventaX\\InventaX\\data\\sales.txt");
+        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\INVEN\\projectXX\\data\\sales.txt");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -230,7 +230,7 @@ public class FileHandler {
     }
 
     public static void rewriteSales(List<Sales> sales) {
-        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\InventaX\\InventaX\\data\\sales.txt");
+        File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\INVEN\\projectXX\\data\\sales.txt");
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(file), "UTF-8"))) {
             for (Sales s : sales) {
@@ -242,7 +242,9 @@ public class FileHandler {
         } catch (IOException e) {
             System.err.println("Error rewriting sales file: " + e.getMessage());
             e.printStackTrace();
-        }}
+        }
+    }
+
     //inventory
 
     public static void writeItem(InventoryItem item) {
