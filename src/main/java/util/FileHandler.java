@@ -124,7 +124,7 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
-}
+
 
     public static void rewritePurchases(List<PurchaseOrder> orders) {
         File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\purchases.txt");
@@ -314,5 +314,5 @@ public class FileHandler {
             System.err.println("Error rewriting items to file: " + e.getMessage());
             e.printStackTrace();
         }
-    }}
-
+    }
+}
