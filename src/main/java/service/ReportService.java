@@ -198,7 +198,7 @@ private void generatePurchasesReport(StringBuilder reportContent, String startDa
     reportContent.append("PURCHASES REPORT\n");
     reportContent.append("================\n\n");
     reportContent.append("Period: ").append(startDate).append(" to ").append(endDate).append("\n\n");
-    
+
     reportContent.append(String.format("%-15s %-10s %-12s %-15s %-15s\n",
             "Purchase ID", "Quantity", "Date", "Supplier ID", "Status"));
     reportContent.append(String.format("%-15s %-10s %-12s %-15s %-15s\n",
@@ -234,6 +234,13 @@ private void generatePurchasesReport(StringBuilder reportContent, String startDa
     reportContent.append("=======\n");
     reportContent.append(String.format("Total Items Purchased: %d\n", totalQuantity));
     reportContent.append(String.format("Number of Purchases: %d\n", purchaseCount));
+}
+
+private boolean isDateInRange(String date, String startDate, String endDate) {
+    if (date == null || startDate == null || endDate == null) {
+        return true;
+    }
+    return date.compareTo(startDate) >= 0 && date.compareTo(endDate) <= 0;
 }
 
 
