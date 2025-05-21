@@ -118,6 +118,65 @@ public class ReportServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+
+        if ("generate".equals(action)) {
+            String reportType = request.getParameter("reportType");
+            String startDate = request.getParameter("startDate");
+            String endDate = request.getParameter("endDate");
+
+            if (reportType == null || reportType.isEmpty()) {
+                request.setAttribute("errorMessage", "Report type is required.");
+                request.getRequestDispatcher("/WEB-INF/views/report/addReport.jsp").forward(request, response);
+                return;
+            }
+
+            try {
+                System.out.println("Generating report: " + reportType + " from " + startDate + " to " + endDate);
+
+                String reportContent = reportService.generateReport(reportType, startDate, endDate);
+
+                String reportFilePath = DATA_DIR + File.separator + reportType.toLowerCase() + "_report.txt";
+                File reportFile = new File(reportFilePath);
+
+                if (!reportFile.exists() || reportFile.length() == 0) {
+                    System.err.println("Report file was not created or is empty: " + reportFilePath);
+                    throw new IOException("Report file was not created properly");
+                }
+
+                StringBuilder content = new StringBuilder();
+                try (BufferedReader reader = new BufferedReader(new FileReader(reportFile))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        content.append(line).append("\n");
+                    }
+                }
+
+                request.setAttribute("reportContent", content.toString());
+                request.setAttribute("reportType", reportType);
+                request.setAttribute("generatedDate", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                request.getRequestDispatcher("/WEB-INF/views/report/previewReport.jsp").forward(request, response);
+
+            }catch (Exception e) {
+                System.err.println("Error generating report: " + e.getMessage());
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Error generating report: " + e.getMessage());
+                request.getRequestDispatcher("/WEB-INF/views/report/addReport.jsp").forward(request, response);
+            }
+        }else if ("delete".equals(action)) {
+            String reportId = request.getParameter("id");
+            if (reportId != null && !reportId.isEmpty()) {
+                try {
+                    reportService.deleteReport(reportId);
+                    request.setAttribute("successMessage", "Report deleted successfully.");
+                } catch (IOException e) {
+                    request.setAttribute("errorMessage", "Error deleting report: " + e.getMessage());
+                }
+            }
+            doGet(request, response);
+        }else {
+            doGet(request, response);
+        }
+
     }
 
 }
