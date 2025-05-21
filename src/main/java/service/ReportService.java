@@ -73,5 +73,14 @@ private void generateInventoryReport(StringBuilder reportContent) throws IOExcep
     reportContent.append("INVENTORY STATUS REPORT\n");
     reportContent.append("======================\n\n");
 
+    reportContent.append(String.format("%-8s %-35s %12s %20s %15s\n",
+            "Item No.", "Product Name", "Quantity", "Expiry Date", "Category"));
+    reportContent.append(String.format("%-8s %-35s %12s %20s %15s\n",
+            "--------", "-----------------------------------", "------------", "--------------------", "---------------"));
+
+    int totalItems = 0;
+    int totalProducts = items.size();
+    int itemNumber = 1;
+
 
 
