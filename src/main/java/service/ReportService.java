@@ -308,6 +308,41 @@ public List<ReportEntry> getAllReports() throws IOException {
                 reports.add(report);
             }
         }
+    } catch (IOException e) {
+        System.err.println("Error reading reports file: " + e.getMessage());
+        e.printStackTrace();
+        throw e;
+    }
+
+    return reports;
+}
+
+public void deleteReport(String reportId) throws IOException {
+    List<ReportEntry> reports = new ArrayList<>();
+    File reportsFile = new File(DATA_DIR, "reports.txt");
+    String reportFilePath = null;
+
+    if (reportsFile.exists()) {
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(reportsFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length > 0) {
+                    if (parts[0].equals(reportId)) {
+                        if (parts.length >= 6) {
+                            reportFilePath = parts[5];
+                        } else if (parts.length >= 2) {
+                            reportFilePath = DATA_DIR + File.separator + parts[1].toLowerCase() + "_report.txt";
+                        }
+                    } else {
+                        lines.add(line);
+                    }
+                }
+            }
+        }
 
 
-
+    }
+}
