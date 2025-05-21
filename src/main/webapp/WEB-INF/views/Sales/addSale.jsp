@@ -5,11 +5,13 @@
   Time: 10:23 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Edit Sale - InventaX</title>
+    <title>Add Sale - InventaX</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -19,6 +21,7 @@
         .sidebar {
             background-color: #2c3e50;
             color: white;
+            min-height: 100vh;
         }
         .sidebar .nav-link {
             color: rgba(255, 255, 255, 0.8);
@@ -32,7 +35,7 @@
             background-color: #343a40;
             color: #f8f9fa;
             min-height: 100vh;
-            padding-top: 1rem;
+            padding: 2rem;
         }
         .card {
             background-color: #495057;
@@ -45,10 +48,14 @@
             border-bottom: 1px solid #6c757d;
             color: #f8f9fa;
         }
-        .form-control, .form-select {
+        .form-label {
+            color: #adb5bd;
+        }
+        .form-control,
+        .form-select {
             background-color: #6c757d;
-            border-color: #868e96;
             color: #f8f9fa;
+            border: 1px solid #868e96;
         }
         .form-control::placeholder,
         .form-select {
@@ -84,8 +91,8 @@
             background-color: #5c636a;
             border-color: #565e64;
         }
-        .border-bottom {
-            border-color: #454d55 !important;
+        h2 {
+            color: #f8f9fa;
         }
         .logo-link {
             text-decoration: none;
@@ -102,7 +109,6 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
             <div class="position-sticky pt-3">
                 <h4 class="text-center mb-3">
@@ -110,44 +116,44 @@
                 </h4>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/dashboard">
+                        <a class="nav-link" href="dashboard">
                             <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/inventory?action=list">
+                        <a class="nav-link" href="inventory?action=list">
                             <i class="fas fa-boxes me-2"></i>Inventory
                         </a>
                     </li>
                     <c:if test="${sessionScope.loggedUser.role == 'admin'}">
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/user">
+                            <a class="nav-link" href="user">
                                 <i class="fas fa-user me-2"></i>Users
                             </a>
                         </li>
                     </c:if>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/suppliers?action=list">
+                        <a class="nav-link" href="suppliers?action=list">
                             <i class="fas fa-truck me-2"></i>Suppliers
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/purchases?action=list">
+                        <a class="nav-link" href="purchases?action=list">
                             <i class="fas fa-shopping-cart me-2"></i>Purchases
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/sales">
+                        <a class="nav-link active" href="sales?action=list">
                             <i class="fas fa-chart-line me-2"></i>Sales
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/reports">
+                        <a class="nav-link" href="reports">
                             <i class="fas fa-file-alt me-2"></i>Reports
                         </a>
                     </li>
                     <li class="nav-item mt-auto">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/logout">
+                        <a class="nav-link" href="logout">
                             <i class="fas fa-sign-out-alt me-2"></i>Logout
                         </a>
                     </li>
@@ -155,66 +161,78 @@
             </div>
         </nav>
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Edit Sale</h1>
+        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom border-secondary">
+                <h2 class="h2">Add New Sale</h2>
                 <a href="sales?action=list" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Back to List
+                    <i class="fas fa-arrow-left me-1"></i> Back to List
                 </a>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Sale Details</h5>
-                </div>
-                <div class="card-body p-4">
-                    <form action="sales" method="post">
-                        <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="salesId" value="${sale.salesId}">
-
-                        <div class="mb-3">
-                            <label for="itemId" class="form-label">Item</label>
-                            <select class="form-select" id="itemId" name="itemId" required>
-                                <option value="">Select an item</option>
-                                <c:forEach items="${items}" var="item">
-                                    <option value="${item.itemId}" ${item.itemId == sale.itemId ? 'selected' : ''}>
-                                            ${item.itemName} (ID: ${item.itemId})
-                                    </option>
-                                </c:forEach>
-                            </select>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i> Sale Details</h5>
                         </div>
+                        <div class="card-body p-4">
+                            <form action="sales" method="post">
+                                <input type="hidden" name="action" value="add">
 
-                        <div class="mb-3">
-                            <label for="quantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="${sale.quantity}" required>
-                        </div>
+                                <div class="mb-3">
+                                    <label for="salesId" class="form-label">Sale ID</label>
+                                    <input type="text" class="form-control" id="salesId" name="salesId" required>
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="totalAmount" class="form-label">Total Amount</label>
-                            <input type="number" step="0.01" class="form-control" id="totalAmount" name="totalAmount" value="${sale.totalAmount}" required>
-                        </div>
+                                <div class="mb-3">
+                                    <label for="itemId" class="form-label">Item</label>
+                                    <select class="form-select" id="itemId" name="itemId" required>
+                                        <option value="">Select an item</option>
+                                        <c:forEach items="${items}" var="item">
+                                            <option value="${item.itemId}">${item.itemName}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="customerName" class="form-label">Customer Name</label>
-                            <input type="text" class="form-control" id="customerName" name="customerName" value="${sale.customerName}" required>
-                        </div>
+                                <div class="mb-3">
+                                    <label for="quantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1" required>
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="paymentStatus" class="form-label">Payment Status</label>
-                            <select class="form-select" id="paymentStatus" name="paymentStatus" required>
-                                <option value="pending" ${sale.paymentStatus == 'pending' ? 'selected' : ''}>Pending</option>
-                                <option value="completed" ${sale.paymentStatus == 'completed' ? 'selected' : ''}>Completed</option>
-                            </select>
-                        </div>
+                                <div class="mb-3">
+                                    <label for="date" class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="date" name="date" required>
+                                </div>
 
-                        <div class="d-flex justify-content-end mt-4">
-                            <a href="sales?action=list" class="btn btn-secondary me-2">Cancel</a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-2"></i>Save Changes
-                            </button>
+                                <div class="mb-3">
+                                    <label for="totalAmount" class="form-label">Total Amount</label>
+                                    <input type="number" class="form-control" id="totalAmount" name="totalAmount" step="0.01" min="0" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="customerName" class="form-label">Customer Name</label>
+                                    <input type="text" class="form-control" id="customerName" name="customerName" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="paymentStatus" class="form-label">Payment Status</label>
+                                    <select class="form-select" id="paymentStatus" name="paymentStatus" required>
+                                        <option value="">Select payment status</option>
+                                        <option value="Paid">Paid</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-4">
+                                    <a href="sales?action=list" class="btn btn-secondary me-2">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-plus me-1"></i> Add Sale
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </main>
