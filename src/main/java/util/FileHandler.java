@@ -112,6 +112,20 @@ public class FileHandler {
         return list;
     }
 
+    //Report
+    public static void writeReport(List<InventoryItem> sortedItems) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Shehan\\Documents\\Modules\\SE1020 -OOP\\Project\\final\\projectXX\\data\\report.txt"))) {
+            for (InventoryItem item : sortedItems) {
+                writer.write(item.getItemId() + "," + item.getItemName() + "," +
+                        item.getQuantity() + "," + item.getExpiryDate() + "," + item.getCategory());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
     public static void rewritePurchases(List<PurchaseOrder> orders) {
         File file = new File("C:\\Users\\ADMIN\\OneDrive\\Desktop\\Invapro\\test\\new\\InventaX\\data\\purchases.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
