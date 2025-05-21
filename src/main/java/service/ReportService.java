@@ -2,10 +2,12 @@ package service;
 
 import model.InventoryItem;
 import model.PurchaseOrder;
+import util.FileHandler;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 public String generateReport(String reportType, String startDate, String endDate) throws IOException {
@@ -59,6 +61,17 @@ public String generateReport(String reportType, String startDate, String endDate
 
     return content;
 }
+
+private void generateInventoryReport(StringBuilder reportContent) throws IOException {
+    List<InventoryItem> items = FileHandler.readItems();
+
+    if (items.isEmpty()) {
+        reportContent.append("No inventory data available.\n");
+        return;
+    }
+
+    reportContent.append("INVENTORY STATUS REPORT\n");
+    reportContent.append("======================\n\n");
 
 
 
