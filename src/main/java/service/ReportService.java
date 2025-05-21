@@ -243,5 +243,39 @@ private boolean isDateInRange(String date, String startDate, String endDate) {
     return date.compareTo(startDate) >= 0 && date.compareTo(endDate) <= 0;
 }
 
+private void saveReport(String reportId, String reportType, String startDate, String endDate, String reportFilePath) throws IOException {
+    String reportEntry = String.format("%s,%s,%s,%s,%s,%s\n",
+            reportId, reportType, startDate, endDate,
+            LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+            reportFilePath);
+
+    String reportsFilePath = DATA_DIR + File.separator + "reports.txt";
+    System.out.println("Saving report metadata to: " + reportsFilePath);
+
+    File reportsFile = new File(reportsFilePath);
+    if (!reportsFile.exists()) {
+        reportsFile.createNewFile();
+        System.out.println("Created reports.txt file");
+    }
+
+    try (FileWriter writer = new FileWriter(reportsFile, true)) {
+        writer.write(reportEntry);
+        writer.flush();
+        System.out.println("Successfully wrote report metadata: " + reportEntry);
+    } catch (IOException e) {
+        System.err.println("Error writing to reports file: " + e.getMessage());
+        e.printStackTrace();
+        throw e;
+    }
+
+    try (FileWriter reportWriter = new FileWriter(reportFilePath, true)) {
+        reportWriter.write("\n\nReport ID: " + reportId + "\n");
+        reportWriter.flush();
+    } catch (IOException e) {
+        System.err.println("Error appending report ID to report file: " + e.getMessage());
+    }
+}
+
+
 
 
