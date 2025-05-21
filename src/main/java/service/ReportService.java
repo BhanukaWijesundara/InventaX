@@ -308,6 +308,14 @@ public List<ReportEntry> getAllReports() throws IOException {
                 reports.add(report);
             }
         }
+    } catch (IOException e) {
+        System.err.println("Error reading reports file: " + e.getMessage());
+        e.printStackTrace();
+        throw e;
+    }
+
+    return reports;
+}
 
 
 
