@@ -1,11 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Hasanthi
-  Date: 5/19/2025
-  Time: 10:37 AM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -170,8 +165,8 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom border-secondary">
-        <h2 class="h2">Purchase Management</h2>
-        <a href="purchases?action=add" class="btn btn-success">
+        <h2 class="h2">Purchase Orders</h2>
+        <a href="purchases?action=add" class="btn btn-primary">
           <i class="fas fa-plus me-1"></i> Add New Purchase
         </a>
       </div>
@@ -224,16 +219,14 @@
                     </c:if>
                   </td>
                   <td>
-                    <c:set var="itemNameFound" value="false"/>
-                    <c:forEach items="${items}" var="item">
-                      <c:if test="${item.itemId eq purchase.itemId}">
-                        ${item.itemName}
-                        <c:set var="itemNameFound" value="true"/>
-                      </c:if>
-                    </c:forEach>
-                    <c:if test="${not itemNameFound}">
-                      <span class="text-muted">${purchase.itemId}</span>
-                    </c:if>
+                    <c:choose>
+                      <c:when test="${not empty itemMap[purchase.itemId]}">
+                        ${itemMap[purchase.itemId]}
+                      </c:when>
+                      <c:otherwise>
+                        <span class="text-muted">${purchase.itemId}</span>
+                      </c:otherwise>
+                    </c:choose>
                   </td>
                   <td>${purchase.quantity}</td>
                   <td>${purchase.date}</td>
