@@ -65,25 +65,38 @@ public class ReportServlet extends HttpServlet {
                             reportFilePath = DATA_DIR + File.separator +
                                     reportEntry.getReportType().toLowerCase() + "_report.txt";
                         }
-                    }
 
-                    File reportFile = new File(reportFilePath);
 
-                    if (reportFile.exists()) {
-                        StringBuilder content = new StringBuilder();
-                        try (BufferedReader reader = new BufferedReader(new FileReader(reportFile))) {
-                            String line;
-                            while ((line = reader.readLine()) != null) {
-                                content.append(line).append("\n");
+                        File reportFile = new File(reportFilePath);
+
+                        if (reportFile.exists()) {
+                            StringBuilder content = new StringBuilder();
+                            try (BufferedReader reader = new BufferedReader(new FileReader(reportFile))) {
+                                String line;
+                                while ((line = reader.readLine()) != null) {
+                                    content.append(line).append("\n");
+                                }
                             }
-                        }
 
-                        request.setAttribute("reportType", reportEntry.getReportType());
-                        request.setAttribute("generatedDate", reportEntry.getGeneratedDate().toString());
-                        request.setAttribute("reportContent", content.toString());
-                        request.getRequestDispatcher("/WEB-INF/views/report/previewReport.jsp").forward(request, response);
+                            request.setAttribute("reportType", reportEntry.getReportType());
+                            request.setAttribute("generatedDate", reportEntry.getGeneratedDate().toString());
+                            request.setAttribute("reportContent", content.toString());
+                            request.getRequestDispatcher("/WEB-INF/views/report/previewReport.jsp").forward(request, response);
+                        } else {
+                            request.setAttribute("errorMessage", "Report file not found: " + reportFilePath);
+                            doGet(request, response);
+                        }
+                    } else {
+                        request.setAttribute("errorMessage", "Report with ID " + reportId + " not found.");
+                        doGet(request, response);
                     }
+                }catch (IOException e) {
+                    request.setAttribute("errorMessage", "Error reading report: " + e.getMessage());
+                    doGet(request, response);
                 }
+            }else {
+                request.setAttribute("errorMessage", "Invalid report ID.");
+                doGet(request, response);
             }
         }
     }
