@@ -50,6 +50,33 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>InventoryServlet</servlet-name>
+    <servlet-class>servlet.InventoryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InventoryServlet</servlet-name>
+    <url-pattern>/inventory</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SupplierServlet</servlet-name>
+    <servlet-class>servlet.SupplierServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SupplierServlet</servlet-name>
+    <url-pattern>/suppliers</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SalesServlet</servlet-name>
+    <servlet-class>servlet.SalesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SalesServlet</servlet-name>
+    <url-pattern>/sales</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>DashboardServlet</servlet-name>
     <servlet-class>servlet.DashboardServlet</servlet-class>
   </servlet>
