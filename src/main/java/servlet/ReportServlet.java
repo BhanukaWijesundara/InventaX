@@ -38,6 +38,32 @@ public class ReportServlet extends HttpServlet {
         }
     }
 
-    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        if ("generate".equals(action)) {
+            request.getRequestDispatcher("/WEB-INF/views/report/addReport.jsp").forward(request, response);
+        } else if ("preview".equals(action)) {
+            String reportId = request.getParameter("id");
+            if (reportId != null && !reportId.isEmpty()) {
+                try {
+                    List<ReportEntry> reports = reportService.getAllReports();
+                    ReportEntry reportEntry = null;
+
+                    for (ReportEntry entry : reports) {
+                        if (entry.getReportId().equals(reportId)) {
+                            reportEntry = entry;
+                            break;
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+
 
 }
