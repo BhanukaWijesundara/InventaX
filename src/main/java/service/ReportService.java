@@ -99,5 +99,26 @@ private void generateInventoryReport(StringBuilder reportContent) throws IOExcep
     reportContent.append(String.format("Total Items in Stock: %d\n", totalItems));
     reportContent.append(String.format("Number of Products: %d\n", totalProducts));
 
+    int inStock = 0;
+    int lowStock = 0;
+    int outOfStock = 0;
+
+    for (InventoryItem item : items) {
+        if (item.getQuantity() <= 0) {
+            outOfStock++;
+        } else if (item.getQuantity() <= 5) {
+            lowStock++;
+        } else {
+            inStock++;
+        }
+    }
+
+    reportContent.append("\nSTOCK STATUS\n");
+    reportContent.append("============\n");
+    reportContent.append(String.format("Products In Stock (Good): %d\n", inStock));
+    reportContent.append(String.format("Products Low Stock (<=5): %d\n", lowStock));
+    reportContent.append(String.format("Products Out of Stock: %d\n", outOfStock));
+}
+
 
 
